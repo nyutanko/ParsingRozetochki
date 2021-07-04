@@ -30,8 +30,10 @@ let link = 'https://rozetka.com.ua/notebooks/c80004/page=';
                     divs.forEach(div =>{
                         let obj = {
                             title: div.querySelector('a.goods-tile__heading.ng-star-inserted').innerText,
-                            price: div.querySelector('div.goods-tile__price.price--red.ng-star-inserted').innerText,
-                            reviews: div.querySelector('div.goods-tile__rating.ng-star-inserted').innerText
+                            reviews: div.querySelector('div.goods-tile__rating.ng-star-inserted').innerText,
+                            price: div.querySelector('div.goods-tile__price.price--red.ng-star-inserted') !== null
+                                ? div.querySelector('div.goods-tile__price.price--red.ng-star-inserted').innerText
+                                : div.querySelector('div.goods-tile__price.ng-star-inserted').innerText
                         }
                         page.push(obj)
                     })
