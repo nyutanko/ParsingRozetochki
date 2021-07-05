@@ -1,6 +1,7 @@
 const puppeteer = require('puppeteer')
 const fs = require('fs')
 const path = require('path')
+const beautify = require("json-beautify")
 
 let link = 'https://rozetka.com.ua/notebooks/c80004/page=';
 
@@ -16,7 +17,7 @@ let link = 'https://rozetka.com.ua/notebooks/c80004/page=';
             width: 1400, height: 900
         })
 
-        while(counter!==68){
+        while(counter!==3){
             await page.goto(`${link}${counter}`)
             await page.waitForSelector('a.button.button_color_gray.button_size_medium.pagination__direction.pagination__direction_type_forward.ng-star-inserted')
             console.log(counter)
@@ -42,10 +43,20 @@ let link = 'https://rozetka.com.ua/notebooks/c80004/page=';
                 }
                 return page
             },{waitUntil: 'a.button.button_color_gray.button_size_medium.pagination__direction.pagination__direction_type_forward.ng-star-inserted'})
+
             await res.push(html)
-            console.log(res)
+            //console.log(res)
             counter++
         }
+        await browser.close()
+        res=res.flat()
+
+        fs.writeFile('roz.json', JSON.stringify(res, null,'\t'), err =>{
+            if(err) throw err
+            console.log('saved')
+            console.log('length', res.length)
+        })
+
     } catch(e){
         console.log(e)
         await browser.close()
