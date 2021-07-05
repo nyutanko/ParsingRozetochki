@@ -1,21 +1,16 @@
 const puppeteer = require('puppeteer')
 const fs = require('fs')
-const path = require('path')
-const beautify = require("json-beautify")
 
 let link = 'https://rozetka.com.ua/notebooks/c80004/page=';
 
 (async () => {
-    let flag = true
+
     let res = []
     let counter = 1
 
     try{
-        const browser = await puppeteer.launch({headless: false, slowMo: 100, devtools: true})
+        const browser = await puppeteer.launch({headless: true})
         const page = await browser.newPage()
-        await page.setViewport({
-            width: 1400, height: 900
-        })
 
         while(counter!==3){
             await page.goto(`${link}${counter}`)
@@ -45,13 +40,13 @@ let link = 'https://rozetka.com.ua/notebooks/c80004/page=';
             },{waitUntil: 'a.button.button_color_gray.button_size_medium.pagination__direction.pagination__direction_type_forward.ng-star-inserted'})
 
             await res.push(html)
-            //console.log(res)
+            console.log(res)
             counter++
         }
         await browser.close()
         res=res.flat()
 
-        fs.writeFile('roz.json', JSON.stringify(res, null,'\t'), err =>{
+        fs.writeFile('RozData.json', JSON.stringify(res, null,'\t'), err =>{
             if(err) throw err
             console.log('saved')
             console.log('length', res.length)
